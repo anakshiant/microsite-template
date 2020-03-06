@@ -1,26 +1,46 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+
+import Layout from './components/Layout';
+import LazyLoadContainer from './components/Common/LazyLoadContainer';
+import { MbrSearchProvider } from './contexts/MbrSearchContext';
+
+const Service = React.lazy(() => import('./pages/Service/index'));
+const MbrSearch = React.lazy(() => import('./pages/MbrSearch/index'));
+const MbrFiling = React.lazy(() => import('./pages/MbrFiling/index'));
 
 const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Layout>
+        <Switch>
+          <Route path="/mbrfile">
+            <LazyLoadContainer>
+              <MbrFiling />
+            </LazyLoadContainer>
+          </Route>
+          <Route path="/mbrsearch">
+            <LazyLoadContainer>
+              <MbrSearchProvider>
+                <MbrSearch />
+              </MbrSearchProvider>
+            </LazyLoadContainer>
+          </Route>
+          <Route path="/purchase">
+            <LazyLoadContainer>
+              <Service />
+            </LazyLoadContainer>
+          </Route>
+          <Route path="/">
+            <LazyLoadContainer>
+              <Service />
+            </LazyLoadContainer>
+          </Route>
+        </Switch>
+      </Layout>
+    </Router>
   );
-}
+};
 
 export default App;
